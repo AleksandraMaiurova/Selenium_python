@@ -32,3 +32,19 @@ def test_fill_form(browser):
                 "Поймали твою заявку, спасибо"))
     assert result, 'Unexpected notification text'
 
+def test_feedback(browser):
+    """
+    Test_1_correct_number_of_first_response
+    """
+
+    browser.get(f"{URL}reviews/")
+    button_show_more = browser.find_element(By.TAG_NAME, 'summary')
+    button_show_more.click()
+
+    WebDriverWait(browser, timeout=10, poll_frequency=2).until(EC.text_to_be_present_in_element(
+        (By.ID, "page#59"), "@ola_panovskaya"))
+
+    externalLink = browser.find_element(By.PARTIAL_LINK_TEXT, 'panovskaya').click()
+    externalLink = browser.current_url
+    assert externalLink == 'https://instagram.com/ola_panovskaya', "Unexpected URL"
+
