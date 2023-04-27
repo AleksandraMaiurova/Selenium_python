@@ -1,9 +1,4 @@
-import pytest
-from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -43,10 +38,6 @@ def test_count_of_products_on_page(browser):
     browser.get(URL)
     element = browser.find_element(By.PARTIAL_LINK_TEXT, 'Полезные экопродукты')
     element.click()
-    # browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-
-    # button_show_more = browser.find_element(by=By.ID, value='razzi-catalog-previous-ajax')
-    # button_show_more.click()
 
     WebDriverWait(browser, timeout=10, poll_frequency=2).until(EC.text_to_be_present_in_element(
         (By.CLASS_NAME, "showing"), "Показано товаров: 1 - 30 из"))
