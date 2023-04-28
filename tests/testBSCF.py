@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from tests.common import CommonHelper
+from selenium.webdriver.support.ui import Select
 
 URL = "https://backstagecrossfit.ru/"
 
@@ -19,18 +19,22 @@ def test_fill_form(browser):
     Test_2_fill_form
     """
     browser.get(URL)
-    
-    common_helper = CommonHelper(browser)
-    common_helper.enter_input(input_id="mod-rscontact-full-name-93", data="Aleksei")
-    common_helper.enter_input(input_id="mod-rscontact-email-93", data="ailukinskii@mail.ru")
-    common_helper.enter_input(input_id="mod-rscontact-mobile-phone-93", data="+79999999999")
-    element = browser.find_element(by=By.CSS_SELECTOR, value="[id='mod_rscontact_cf1_93'] option[3]").click()
-    element = browser.find_element(by=By.CSS_SELECTOR, value="[id='mod-rscontact-submit-btn-93']").click() 
+    element = browser.find_element(By.ID, 'mod-rscontact-full-name-93')
+    element.send_keys("Aleksei")
+    element = browser.find_element(By.ID, 'mod-rscontact-email-93')
+    element.send_keys("ailukinskii@mail.ru")
+    element = browser.find_element(By.ID, 'mod-rscontact-mobile-phone-93')
+    element.send_keys("+79999999999")
+    select = Select(browser.find_element(By.ID, 'mod_rscontact_cf1_93'))
+    select.select_by_value('Знакомство с клубом')
+    element = browser.find_element(By.NAME, 'mod_rscontact_submit-btn-93')
+    element.click() 
     result = WebDriverWait(browser, timeout=10, poll_frequency=2).until(
         EC.text_to_be_present_in_element(
             (By.CLASS_NAME, 'uk-card uk-card-body uk-card-secondary uk-text-left@xl uk-text-left uk-scrollspy-inview'), \
                 "Поймали твою заявку, спасибо"))
     assert result, 'Unexpected notification text'
+    
 
 def test_feedback(browser):
     """
